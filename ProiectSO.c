@@ -264,19 +264,21 @@ void wait_process(char *dir_out)
   int PID;
   int index;
  
-  PID = wait(&index);
- 
-  if(PID == -1)
-    {
-      perror("Eroare process\n");
-      exit(-1);
-    }
- 
-  if(WIFEXITED(index))
-    printf("S-a incheiat procesul cu pid-ul %d si codul %d\n",PID,WEXITSTATUS(index));
+  while((PID = wait(&index)) != -1)
+  {
+    /*
+    if(PID == -1)
+      {
+        perror("Eroare process\n");
+        exit(-1);
+      }
+    */
 
-  else printf("Procesul cu PID %d nu s-a terminat corect\n", PID);
- 
+    if(WIFEXITED(index))
+      printf("S-a incheiat procesul cu pid-ul %d si codul %d\n",PID,WEXITSTATUS(index));
+
+    else printf("Procesul cu PID %d nu s-a terminat corect\n", PID);
+  }
 }
 
 void procesPixeli(char* name, char *path, char *dir_out)
@@ -447,10 +449,10 @@ void citireD(char *dir_in, char *dir_out)
             }
  
           if(lstat(path,&legatura)==-1)
-   {
-     perror("eroare stat legatura\n");
-     exit(1);
-   }
+            {
+              perror("eroare stat legatura\n");
+              exit(1);
+            }
  
  //verificare director
           if(S_ISDIR(file.st_mode))
@@ -459,7 +461,7 @@ void citireD(char *dir_in, char *dir_out)
               citireD(path, dir_out);
             }
           else
-   ProcesCreare(entry,path, entry->d_name, &file, &legatura, dir_out);
+              ProcesCreare(entry,path, entry->d_name, &file, &legatura, dir_out);
         }
     }
  
@@ -473,13 +475,13 @@ void citireD(char *dir_in, char *dir_out)
 
 int main(int argc,char*argv[])
 {
-  if(argc!=3)
+  if(argc!=4)
     {
       perror("nr de argumente invalid");
       exit(1);
     }
  
-  citireD(argv[1], argv[2]);
+  citireD(argv[1], argv[2], argv[3]);
  
   return 0;
 }
