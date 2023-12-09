@@ -24,9 +24,8 @@ function linieOK
     return 1  #daca nu e ok returnam 1
 }
 
-
 #Script-ul va citi continuu linii de la intrarea standard pana la intalnirea end-of-file
-#și va contoriza numărul de “propoziții corecte” care conțin caracterul primit ca și argument.
+#si va contoriza numarul de "propozitii corecte" care contin caracterul primit ca si argument.
 while IFS= read -r linie || [ -n "$linie" ]; do
     if linieOK "$linie"; then ((ok++))  #apelam functia de mai sus pt a verifica daca linia este ok si incrementam contorul 'ok'
     fi
